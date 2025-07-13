@@ -39,7 +39,7 @@
         "navigation": [
             {
               "group": "API reference",
-              "openapi": "api-reference/openapi.json"
+              "openapi": "openapi.json"
             }
         ],
         "groups": [
