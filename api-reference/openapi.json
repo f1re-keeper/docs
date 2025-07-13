@@ -1,217 +1,1349 @@
 {
-  "openapi": "3.1.0",
-  "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
+    "openapi": "3.0.0",
+    "servers": [
+        {
+            "url": "url: https://virtserver.swaggerhub.com/ElenesOrganization/game-verse_api/1.0.0"
+        }
+    ],
+    "info": {
+        "title": "Game-Verse API",
+        "description": "REST API for the Game-Verse platform, which includes different types of games. Here studios can publish games and users can take part in different matches while also getting achievements and appearing on the leaderboard",
+        "version": "1.0.0"
     },
-    "version": "1.0.0"
-  },
-  "servers": [
-    {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
-  "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
         },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
+        "parameters": {
+            "page": {
+                "name": "page",
+                "in": "query",
+                "description": "Page number (pagination)",
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
-        }
-      },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
                 "type": "integer",
-                "format": "int64"
-              }
+                "default": 1
+                }
+            },
+            "limit": {
+                "name": "limit",
+                "in": "query",
+                "description": "Page size",
+                "schema": {
+                "type": "integer",
+                "default": 10
+                }
+            },
+            "sort": {
+                "name": "sort",
+                "in": "query",
+                "description": "Sort by a field of choice (e.g., name, release-date, etc.)",
+                "schema": {
+                "type": "string"
+                }
             }
-          }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          }
+        },
+        "responses": {
+            "Unauthorized": {
+                "description": "Authentication token missing or invalid"
+            },
+            "Forbidden": {
+                "description": "Access denied - insufficient permissions"
+            },
+            "NotFound": {
+                "description": "Resource not found"
+            },
+            "TooManyRequests": {
+                "description": "Rate limit exceeded"
+            }
+        },
+        "schemas": {
+            "Achievement": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "game-id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "game-title": {
+                        "type": "string"
+                    },
+                    "achievement-type": {
+                        "type": "string",
+                        "enum": ["bronze", "silver", "gold", "platinum"]
+                    },
+                    "points": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "criteria": {
+                        "type": "object",
+                        "description": "JSON object defining achievement criteria",
+                        "additionalProperties": true
+                    },
+                    "created-at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated-at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Game": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "genre": {
+                        "type": "string",
+                        "enum": ["puzzle", "fps", "racing"]
+                    },
+                    "studio-id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "studio-name": {
+                        "type": "string"
+                    },
+                    "game-achievements": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Achievement"
+                        }
+                    },
+                    "release-date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "created-at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated-at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Studio": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "games-count": {
+                        "type": "integer"
+                    },
+                    "games-list":{
+                        "type": "array",
+                        "items" : {
+                            "$ref" : "#/components/schemas/Game"
+                        }
+                    },
+                    "created-at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated-at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "total-score": {
+                        "type": "integer"
+                    },
+                    "achievement-count": {
+                        "type": "integer"
+                    },
+                    "user-achievements" : {
+                        "type" : "array",
+                        "items" : {
+                            "$ref" : "#/components/schemas/Achievement"
+                        }
+                    },
+                    "created-at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated-at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Player": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                        },
+                    "username": {
+                        "type": "string"
+                    },
+                    "score": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "Match": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "game-id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "game-title": {
+                        "type": "string"
+                    },
+                    "player-ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    "players": {
+                        "type": "array",
+                        "items": {
+                            "$ref" : "#/components/schemas/Player"
+                        }
+                    },
+                    "result": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "integer"
+                        }
+                    },
+                    "season": {
+                        "type": "string"
+                    },
+                    "duration": {
+                        "type": "integer",
+                        "description": "Match duration in seconds"
+                    },
+                    "played-at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "started-at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "LeaderboardEntry": {
+                "type": "object",
+                "properties": {
+                    "rank": {
+                        "type": "integer"
+                    },
+                    "users": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "score": {
+                        "type": "integer"
+                    }
+                }
+            }
         }
-      }
     },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
-      }
-    }
-  }
+    "paths": {
+        "/games": {
+            "get": {
+                "summary": "List games",
+                "parameters": [
+                {
+                    "name": "genre",
+                    "in": "query",
+                    "schema": {
+                    "type": "string",
+                    "enum": ["puzzle", "fps", "racing"]
+                    }
+                },
+                {
+                    "$ref": "#/components/parameters/page"
+                },
+                {
+                    "$ref": "#/components/parameters/limit"
+                },
+                {
+                    "$ref": "#/components/parameters/sort"
+                }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of games",
+                        "content": {
+                        "application/json": {
+                            "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Game"
+                                }
+                                },
+                                "pagination": {
+                                "type": "object",
+                                "properties": {
+                                    "page": {
+                                    "type": "integer"
+                                    },
+                                    "limit": {
+                                    "type": "integer"
+                                    },
+                                    "total": {
+                                    "type": "integer"
+                                    },
+                                    "has-next": {
+                                    "type": "boolean"
+                                    }
+                                }
+                                }
+                            }
+                            }
+                        }
+                        }
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/TooManyRequests"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create game",
+                "description": "Studios only",
+                "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "required": ["title", "genre"],
+                        "properties": {
+                        "title": {
+                            "type": "string"
+                        },
+                        "genre": {
+                            "type": "string",
+                            "enum": ["puzzle", "fps", "racing"]
+                        }
+                        }
+                    }
+                    }
+                }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Game created",
+                        "content": {
+                        "application/json": {
+                            "schema": {
+                            "$ref": "#/components/schemas/Game"
+                            }
+                        }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    }
+                }
+            }
+        },
+        "/games/{id}": {
+            "get": {
+                "summary": "Get game",
+                "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                    }
+                }
+                ],
+                "responses": {
+                "200": {
+                    "description": "Game details",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "$ref": "#/components/schemas/Game"
+                        }
+                    }
+                    }
+                },
+                "404": {
+                    "$ref": "#/components/responses/NotFound"
+                }
+                }
+            },
+            "put": {
+                "summary": "Update game",
+                "description": "Studios can only update their own games",
+                "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                    }
+                }
+                ],
+                "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                        "title": {
+                            "type": "string"
+                        },
+                        "genre": {
+                            "type": "string",
+                            "enum": ["puzzle", "fps", "racing"]
+                        }
+                        }
+                    }
+                    }
+                }
+                },
+                "responses": {
+                "200": {
+                    "description": "Game updated",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "$ref": "#/components/schemas/Game"
+                        }
+                    }
+                    }
+                },
+                "401": {
+                    "$ref": "#/components/responses/Unauthorized"
+                },
+                "403": {
+                    "$ref": "#/components/responses/Forbidden"
+                },
+                "404": {
+                    "$ref": "#/components/responses/NotFound"
+                }
+                }
+            },
+            "delete": {
+                "summary": "Delete game",
+                "description": "Studios can only delete their own games",
+                "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                    }
+                }
+                ],
+                "responses": {
+                "204": {
+                    "description": "Game deleted"
+                },
+                "401": {
+                    "$ref": "#/components/responses/Unauthorized"
+                },
+                "403": {
+                    "$ref": "#/components/responses/Forbidden"
+                }
+                }
+            }
+        },
+        "/games/{id}/achievements": {
+            "get": {
+                "summary": "List game achievements",
+                "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                    }
+                },
+                {
+                    "name": "type",
+                    "in": "query",
+                    "schema": {
+                    "type": "string",
+                    "enum": ["bronze", "silver", "gold", "platinum"]
+                    }
+                },
+                {
+                    "$ref": "#/components/parameters/page"
+                },
+                {
+                    "$ref": "#/components/parameters/limit"
+                }
+                ],
+                "responses": {
+                "200": {
+                    "description": "Game achievements",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "type": "object",
+                        "properties": {
+                            "data": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/Achievement"
+                            }
+                            },
+                            "pagination": {
+                            "type": "object"
+                            }
+                        }
+                        }
+                    }
+                    }
+                },
+                "404": {
+                    "$ref": "#/components/responses/NotFound"
+                }
+                }
+            },
+            "post": {
+                "summary": "Create achievement",
+                "description": "Studios only, for their own games",
+                "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                    }
+                }
+                ],
+                "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "required": ["name", "description", "type", "points"],
+                        "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "description": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "type": "string",
+                            "enum": ["bronze", "silver", "gold", "platinum"]
+                        },
+                        "points": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 1000
+                        },
+                        "criteria": {
+                            "type": "object"
+                        }
+                        }
+                    }
+                    }
+                }
+                },
+                "responses": {
+                "201": {
+                    "description": "Achievement created",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "$ref": "#/components/schemas/Achievement"
+                        }
+                    }
+                    }
+                },
+                "401": {
+                    "$ref": "#/components/responses/Unauthorized"
+                },
+                "403": {
+                    "$ref": "#/components/responses/Forbidden"
+                }
+                }
+            },
+            "delete": {
+                "summary": "Delete achievement",
+                "description": "Studios only, for their own games",
+                "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                    }
+                }
+                ],
+                "responses": {
+                "204": {
+                    "description": "Achievement deleted"
+                },
+                "401": {
+                    "$ref": "#/components/responses/Unauthorized"
+                },
+                "403": {
+                    "$ref": "#/components/responses/Forbidden"
+                }
+                }
+            }
+        },
+        "/studios": {
+        "get": {
+            "summary": "List studios",
+            "parameters": [
+            {
+                "name": "name",
+                "in": "query",
+                "schema": {
+                "type": "string"
+                }
+            },
+            {
+                "$ref": "#/components/parameters/page"
+            },
+            {
+                "$ref": "#/components/parameters/limit"
+            }
+            ],
+            "responses": {
+            "200": {
+                "description": "List of studios",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Studio"
+                        }
+                        },
+                        "pagination": {
+                        "type": "object"
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        },
+        "post": {
+            "summary": "Create studio",
+            "description": "Admin only",
+            "requestBody": {
+            "required": true,
+            "content": {
+                "application/json": {
+                "schema": {
+                    "type": "object",
+                    "required": ["name", "email"],
+                    "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                    }
+                }
+                }
+            }
+            },
+            "responses": {
+            "201": {
+                "description": "Studio created",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "$ref": "#/components/schemas/Studio"
+                    }
+                }
+                }
+            },
+            "401": {
+                "$ref": "#/components/responses/Unauthorized"
+            },
+            "403": {
+                "$ref": "#/components/responses/Forbidden"
+            }
+            }
+        }
+        },
+        "/studios/{id}": {
+        "get": {
+            "summary": "Get studio",
+            "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                "type": "string",
+                "format": "uuid"
+                }
+            }
+            ],
+            "responses": {
+            "200": {
+                "description": "Studio details",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "$ref": "#/components/schemas/Studio"
+                    }
+                }
+                }
+            },
+            "404": {
+                "$ref": "#/components/responses/NotFound"
+            }
+            }
+        },
+        "put": {
+            "summary": "Update studio",
+            "description": "Admin or studio owner only",
+            "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                "type": "string",
+                "format": "uuid"
+                }
+            }
+            ],
+            "requestBody": {
+            "content": {
+                "application/json": {
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                    }
+                }
+                }
+            }
+            },
+            "responses": {
+            "200": {
+                "description": "Studio updated",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "$ref": "#/components/schemas/Studio"
+                    }
+                }
+                }
+            },
+            "401": {
+                "$ref": "#/components/responses/Unauthorized"
+            },
+            "403": {
+                "$ref": "#/components/responses/Forbidden"
+            }
+            }
+        },
+        "delete": {
+            "summary": "Delete studio",
+            "description": "Admin only",
+            "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                "type": "string",
+                "format": "uuid"
+                }
+            }
+            ],
+            "responses": {
+            "204": {
+                "description": "Studio deleted"
+            },
+            "401": {
+                "$ref": "#/components/responses/Unauthorized"
+            },
+            "403": {
+                "$ref": "#/components/responses/Forbidden"
+            }
+            }
+        }
+        },
+        "/users": {
+            "get": {
+                "summary": "List users",
+                "parameters": [
+                {
+                    "name": "username",
+                    "in": "query",
+                    "schema": {
+                    "type": "string"
+                    }
+                },
+                {
+                    "$ref": "#/components/parameters/page"
+                },
+                {
+                    "$ref": "#/components/parameters/limit"
+                }
+                ],
+                "responses": {
+                "200": {
+                    "description": "List of users",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "type": "object",
+                        "properties": {
+                            "data": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                            },
+                            "pagination": {
+                            "type": "object"
+                            }
+                        }
+                        }
+                    }
+                    }
+                }
+                }
+            },
+            "post": {
+                "summary": "Add user",
+                "description": "Add a new user",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "format": "email"
+                                }
+                            }
+                        }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User added",
+                        "content": {
+                        "application/json": {
+                            "schema": {
+                            "$ref": "#/components/schemas/User"
+                            }
+                        }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+        "get": {
+            "summary": "Get user",
+            "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                "type": "string",
+                "format": "uuid"
+                }
+            }
+            ],
+            "responses": {
+            "200": {
+                "description": "User profile",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "$ref": "#/components/schemas/User"
+                    }
+                }
+                }
+            },
+            "404": {
+                "$ref": "#/components/responses/NotFound"
+            }
+            }
+        },
+        "put": {
+            "summary": "Update user",
+            "description": "Admin only",
+            "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                "type": "string",
+                "format": "uuid"
+                }
+            }
+            ],
+            "requestBody": {
+            "content": {
+                "application/json": {
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    }
+                    }
+                }
+                }
+            }
+            },
+            "responses": {
+            "200": {
+                "description": "User updated",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "$ref": "#/components/schemas/User"
+                    }
+                }
+                }
+            },
+            "401": {
+                "$ref": "#/components/responses/Unauthorized"
+            },
+            "403": {
+                "$ref": "#/components/responses/Forbidden"
+            }
+            }
+        },
+        "delete": {
+            "summary": "Delete user",
+            "description": "Admin only",
+            "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                "type": "string",
+                "format": "uuid"
+                }
+            }
+            ],
+            "responses": {
+            "204": {
+                "description": "User deleted"
+            },
+            "401": {
+                "$ref": "#/components/responses/Unauthorized"
+            },
+            "403": {
+                "$ref": "#/components/responses/Forbidden"
+            }
+            }
+        }
+        },
+        "/users/{id}/achievements": {
+        "get": {
+            "summary": "Get user achievements",
+            "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                "type": "string",
+                "format": "uuid"
+                }
+            },
+            {
+                "name": "game-id",
+                "in": "query",
+                "schema": {
+                "type": "string",
+                "format": "uuid"
+                }
+            },
+            {
+                "$ref": "#/components/parameters/page"
+            },
+            {
+                "$ref": "#/components/parameters/limit"
+            }
+            ],
+            "responses": {
+            "200": {
+                "description": "User achievements",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Achievement"
+                        }
+                        },
+                        "pagination": {
+                        "type": "object"
+                        }
+                    }
+                    }
+                }
+                }
+            },
+            "404": {
+                "$ref": "#/components/responses/NotFound"
+            }
+            }
+        }
+        },
+        "/matches": {
+        "get": {
+            "summary": "List matches",
+            "parameters": [
+            {
+                "name": "game-id",
+                "in": "query",
+                "schema": {
+                "type": "string",
+                "format": "uuid"
+                }
+            },
+            {
+                "name": "user-id",
+                "in": "query",
+                "schema": {
+                "type": "string",
+                "format": "uuid"
+                }
+            },
+            {
+                "name": "status",
+                "in": "query",
+                "schema": {
+                "type": "string",
+                "enum": ["completed", "abandoned", "disputed"]
+                }
+            },
+            {
+                "$ref": "#/components/parameters/page"
+            },
+            {
+                "$ref": "#/components/parameters/limit"
+            }
+            ],
+            "responses": {
+            "200": {
+                "description": "List of matches",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Match"
+                        }
+                        },
+                        "pagination": {
+                        "type": "object"
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        },
+        "post": {
+            "summary": "Record match",
+            "requestBody": {
+            "required": true,
+            "content": {
+                "application/json": {
+                "schema": {
+                    "type": "object",
+                    "required": ["game-id", "players"],
+                    "properties": {
+                    "game-id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "players": {
+                        "type": "array",
+                        "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                            "type": "string",
+                            "format": "uuid"
+                            },
+                            "score": {
+                            "type": "integer"
+                            }
+                        }
+                        }
+                    },
+                    "season": {
+                        "type": "string"
+                    },
+                    "duration": {
+                        "type": "integer"
+                    }
+                    }
+                }
+                }
+            }
+            },
+            "responses": {
+            "201": {
+                "description": "Match recorded",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "$ref": "#/components/schemas/Match"
+                    }
+                }
+                }
+            },
+            "401": {
+                "$ref": "#/components/responses/Unauthorized"
+            }
+            }
+        }
+        },
+        "/matches/{id}": {
+        "get": {
+            "summary": "Get match",
+            "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                "type": "string",
+                "format": "uuid"
+                }
+            }
+            ],
+            "responses": {
+            "200": {
+                "description": "Match details",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "$ref": "#/components/schemas/Match"
+                    }
+                }
+                }
+            },
+            "404": {
+                "$ref": "#/components/responses/NotFound"
+            }
+            }
+        },
+        "delete": {
+            "summary": "Delete match",
+            "description": "Admin only",
+            "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                "type": "string",
+                "format": "uuid"
+                }
+            }
+            ],
+            "responses": {
+            "204": {
+                "description": "Match deleted"
+            },
+            "401": {
+                "$ref": "#/components/responses/Unauthorized"
+            },
+            "403": {
+                "$ref": "#/components/responses/Forbidden"
+            }
+            }
+        }
+        },
+        "/leaderboard": {
+        "get": {
+            "summary": "Get leaderboard",
+            "parameters": [
+            {
+                "name": "game-id",
+                "in": "query",
+                "schema": {
+                "type": "string",
+                "format": "uuid"
+                }
+            },
+            {
+                "name": "season",
+                "in": "query",
+                "schema": {
+                "type": "string"
+                }
+            },
+            {
+                "$ref": "#/components/parameters/page"
+            },
+            {
+                "$ref": "#/components/parameters/limit"
+            }
+            ],
+            "responses": {
+            "200": {
+                "description": "Leaderboard rankings",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/LeaderboardEntry"
+                        }
+                        },
+                        "pagination": {
+                        "type": "object",
+                        "properties": {
+                            "page": {
+                            "type": "integer"
+                            },
+                            "limit": {
+                            "type": "integer"
+                            },
+                            "total": {
+                            "type": "integer"
+                            },
+                            "has-next": {
+                            "type": "boolean"
+                            }
+                        }
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
+        }
 }
