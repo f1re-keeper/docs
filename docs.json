@@ -39,9 +39,7 @@
         "groups": [
           {
             "group": "API Documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
+            "openapi": "https://virtserver.swaggerhub.com/ElenesOrganization/game-verse_api/1.0.0"
           },
           {
             "group": "Endpoints",
