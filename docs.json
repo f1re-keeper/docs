@@ -40,35 +40,6 @@
           {
             "group": "API Documentation",
             "openapi": "https://virtserver.swaggerhub.com/ElenesOrganization/game-verse_api/1.0.0"
-          },
-          {
-            "group": "Endpoints",
-            "pages": [
-              "list-games",
-              "create-game",
-              "get-game",
-              "update-game",
-              "delete-game",
-              "list-game-achievements",
-              "create-achievement",
-              "delete-achievement",
-              "list-studios",
-              "create-studio",
-              "get-studio",
-              "update-studio",
-              "delete-studio",
-              "list-users",
-              "add-user",
-              "get-user",
-              "update-user",
-              "delete-user",
-              "get-user-achievements",
-              "list-matches",
-              "record-match",
-              "get-match",
-              "delete-match",
-              "get-leaderboard"
-            ]
           }
         ]
       }
