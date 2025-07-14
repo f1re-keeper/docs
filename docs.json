@@ -38,10 +38,6 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "API Documentation",
-            "openapi": "https://github.com/f1re-keeper/docs/blob/main/openapi.json"
-          },
-          {
             "group": "Endpoints",
             "pages": [
               "api-reference/endpoint/list-games",
