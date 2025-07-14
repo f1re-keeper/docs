@@ -1120,22 +1120,6 @@
                 }
             },
             {
-                "name": "user-id",
-                "in": "query",
-                "schema": {
-                "type": "string",
-                "format": "uuid"
-                }
-            },
-            {
-                "name": "status",
-                "in": "query",
-                "schema": {
-                "type": "string",
-                "enum": ["completed", "abandoned", "disputed"]
-                }
-            },
-            {
                 "$ref": "#/components/parameters/page"
             },
             {
