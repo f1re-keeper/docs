@@ -14,7 +14,7 @@
         "tab": "Guides",
         "groups": [
           {
-            "group": "Get Started",
+            "group": "Game Verse",
             "pages": [
               "index"
             ]
@@ -26,7 +26,9 @@
         "groups": [
           {
             "group": "API Documentation",
-            "pages": "api-reference/introduction"
+            "pages": [
+              "api-reference/introduction"
+            ]
           },
           {
             "group": "Endpoints",
@@ -59,9 +61,8 @@
           }
         ]
       }
-    ]
-  },
-  "global": {
+    ],
+    "global": {
       "anchors": [
         {
           "anchor": "Documentation",
@@ -79,6 +80,7 @@
           "icon": "newspaper"
         }
       ]
+    }
   },
   "logo": {
     "light": "/logo/light.svg",
