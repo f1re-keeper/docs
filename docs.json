@@ -39,9 +39,7 @@
         "groups": [
           {
             "group": "API Documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
+            "openapi": "https://github.com/f1re-keeper/docs/blob/main/openapi.json"
           },
           {
             "group": "Endpoints",
