@@ -668,13 +668,6 @@
             "summary": "List studios",
             "parameters": [
             {
-                "name": "name",
-                "in": "query",
-                "schema": {
-                "type": "string"
-                }
-            },
-            {
                 "$ref": "#/components/parameters/page"
             },
             {
@@ -866,13 +859,6 @@
             "get": {
                 "summary": "List users",
                 "parameters": [
-                {
-                    "name": "username",
-                    "in": "query",
-                    "schema": {
-                    "type": "string"
-                    }
-                },
                 {
                     "$ref": "#/components/parameters/page"
                 },
