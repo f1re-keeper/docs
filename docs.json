@@ -43,16 +43,40 @@
               "api-reference/introduction"
             ]
           },
-           {
+          {
             "group": "Endpoints",
-            "openapi": {
-              "source": "/openapi.json",
-              "directory": "api-reference"
-            }
+            "pages": [
+              "list-games",
+              "create-game",
+              "get-game",
+              "update-game",
+              "delete-game",
+              "list-game-achievements",
+              "create-achievement",
+              "delete-achievement",
+              "list-studios",
+              "create-studio",
+              "get-studio",
+              "update-studio",
+              "delete-studio",
+              "list-users",
+              "add-user",
+              "get-user",
+              "update-user",
+              "delete-user",
+              "get-user-achievements",
+              "list-matches",
+              "record-match",
+              "get-match",
+              "delete-match",
+              "get-leaderboard"
+            ]
+          }
         ]
       }
-    ],
-    "global": {
+    ]
+  },
+  "global": {
       "anchors": [
         {
           "anchor": "Documentation",
@@ -70,7 +94,6 @@
           "icon": "newspaper"
         }
       ]
-    }
   },
   "logo": {
     "light": "/logo/light.svg",
